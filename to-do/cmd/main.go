@@ -1,11 +1,11 @@
-package main
+package todo
 
 import (
 	"fmt"
 	"flag"
 	"os"
 	// "github.com/spf13/cobra"
-	"to-do/todos"
+	"github.com/MahimaSharma8/to-do/todo"
 
 )
 const (

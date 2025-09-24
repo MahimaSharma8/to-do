@@ -1,6 +1,5 @@
 module github.com/MahimaSharma8/to-do
-
-go 1.22.5
+go 1.22
 
 require (
 	github.com/JoelOtter/termloop v0.0.0-20210806173944-5f7c38744afb // indirect
