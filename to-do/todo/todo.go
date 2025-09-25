@@ -39,19 +39,19 @@ type Todos []item
 
 //(t *Todos) is called the receiver. this function (Add) belongs to the type Todos. Inside the function, t acts like a variable that represents the Todos instance you’re working on. It’s very similar to self
 
-func (t *Todos) Add(task string, status string, priority int, topic string) {
+func (t *Todos) Add(task string, status Status, priority Priority, topic string) {
 	todo := item{
 		Task: task,
-		Status:   Status(status),
-    	Priority: Priority(priority),
+		Status: status,
+		Priority: priority,
 		Topic: topic,
 		Created: time.Now(),
 		Completed: nil,
 		TimeWorked: 0,
-
 	}
 	*t = append(*t, todo)
 }
+
 
 func (t *Todos) Complete(index int) error {
 	ls := *t 
