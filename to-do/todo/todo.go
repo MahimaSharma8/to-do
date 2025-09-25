@@ -42,12 +42,12 @@ type Todos []item
 func (t *Todos) Add(task string, status string, priority int, topic string) {
 	todo := item{
 		Task: task,
-		Status: status,
-		Priority: priority,
+		Status:   Status(status),
+    	Priority: Priority(priority),
 		Topic: topic,
 		Created: time.Now(),
 		Completed: nil,
-		TimeWorked: 0
+		TimeWorked: 0,
 
 	}
 	*t = append(*t, todo)
@@ -55,11 +55,12 @@ func (t *Todos) Add(task string, status string, priority int, topic string) {
 
 func (t *Todos) Complete(index int) error {
 	ls := *t 
+	now := time.Now()
 	if index<=0 || index > len(ls) {
 		return errors.New("invalid index")
 	}
 
-	ls[index-1].Completed = &(time.Now())
+	ls[index-1].Completed = &now
 	ls[index-1].Status = Done
 	ls[index-1].TimeWorked = time.Since(ls[index-1].Created)
 	return nil 
@@ -74,7 +75,7 @@ func (t *Todos) Delete(index int) error {
 
 	newTodos := make([]item, 0, len(ls))
     for _, todo := range ls {
-        if !(todo.Status == Done && time.Now().Sub(todo.Completed) > 24*time.Hour) {
+        if !(todo.Status == Done && time.Now().Sub(*todo.Completed) > 24*time.Hour) {
             newTodos = append(newTodos, todo)
         }
     }
@@ -88,18 +89,19 @@ func (t *Todos) Delete(index int) error {
 
 func (t *Todos) Edit(index int, task string, status string, priority int, topic string) error {
 	ls := *t
+	now := time.Now()
 	if index<=0 || index > len(ls) {
 		return errors.New("invalid index")
 	}
 	todo := &ls[index-1]
 	todo.Task = task
-    todo.Status = status
-    todo.Priority = priority
+    todo.Status = Status(status)
+    todo.Priority = Priority(priority)
     todo.Topic = topic
 
 	// If status is Done and Completed not yet set, set it to now
-	if status == Done && todo.Complete == nil {
-        todo.Completed = &(time.Now())
+	if Status(status) == Done && todo.Completed == nil {
+        todo.Completed = &now
         todo.TimeWorked = time.Since(todo.Created)
     }
 
@@ -129,11 +131,10 @@ func (t *Todos) Load(filename string) error {
 }
 
 func (t *Todos) Store(filename string) error {
-		data, err := json.Marshal(t, "", " ")
+		data, err := json.MarshalIndent(t, "", "  ")
 		if err != nil {
 			return err
 		}
 	
 		return os.WriteFile(filename, data, 0644) //0644 is permissions 
 }
-
