@@ -81,7 +81,7 @@ func renderTodos(todos *todo.Todos, selected int) string {
 			Render("No todos yet!")
 	}
 
-	var rendered []string
+	var rendered string
 	for i, t := range *todos {
 		// Prefix based on status
 		prefix := "[ ]"
@@ -105,19 +105,26 @@ func renderTodos(todos *todo.Todos, selected int) string {
 
 		content := lipgloss.JoinVertical(lipgloss.Left, append([]string{taskLine}, details...)...)
 
-		boxStyle := todoBox
-		if i == selected {
+		var boxStyle lipgloss.Style
+		if t.Completed != nil {
+			boxStyle = lipgloss.NewStyle().
+				Foreground(lipgloss.Color("#484848ff")).
+				Padding(0, 1)
+		} else if i == selected {
 			boxStyle = lipgloss.NewStyle().
 				Border(lipgloss.RoundedBorder()).
 				BorderForeground(lipgloss.Color("#FF69B4")).
 				Padding(0, 1)
+		} else {
+			boxStyle = todoBox
 		}
 
-		rendered = append(rendered, boxStyle.Render(content))
+		rendered += boxStyle.Render(content) + "\n\n"
 	}
 
-	return strings.Join(rendered, "\n\n")
+	return rendered
 }
+
 
 
 
