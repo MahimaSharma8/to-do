@@ -1,10 +1,28 @@
 [
   {
-    "Task": "nothing",
+    "Task": "Finishing my go projct",
     "Status": "In-progress...",
-    "Priority": 1,
+    "Priority": 2,
     "Topic": "Personal",
-    "Created": "2025-09-26T00:34:03.892361+05:30",
+    "Created": "2025-09-26T17:10:10.865664+05:30",
+    "Completed": null,
+    "TimeWorked": 0
+  },
+  {
+    "Task": "leetcode problem 2",
+    "Status": "Pending?!",
+    "Priority": 2,
+    "Topic": "Personal",
+    "Created": "2025-09-26T17:22:54.265344+05:30",
+    "Completed": null,
+    "TimeWorked": 0
+  },
+  {
+    "Task": "Make Dinner ",
+    "Status": "Pending?!",
+    "Priority": 0,
+    "Topic": "Health",
+    "Created": "2025-09-26T17:23:12.703617+05:30",
     "Completed": null,
     "TimeWorked": 0
   }

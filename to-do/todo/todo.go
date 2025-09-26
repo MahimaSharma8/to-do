@@ -7,6 +7,9 @@ import (
     "time"
 )
 
+const todoFile = "./.todos.json"
+
+
 
 type Status string
 const (
@@ -36,6 +39,8 @@ type item struct {
 }
 
 type Todos []item
+
+
 
 //(t *Todos) is called the receiver. this function (Add) belongs to the type Todos. Inside the function, t acts like a variable that represents the Todos instance you’re working on. It’s very similar to self
 
@@ -88,28 +93,29 @@ func (t *Todos) Delete(index int) error {
 
 
 func (t *Todos) Edit(index int, task string, status string, priority int, topic string) error {
-	ls := *t
-	now := time.Now()
-	if index<=0 || index > len(ls) {
-		return errors.New("invalid index")
-	}
-	todo := &ls[index-1]
-	todo.Task = task
+    if index < 0 || index >= len(*t) {
+        return errors.New("invalid index")
+    }
+
+    todo := &(*t)[index]
+    todo.Task = task
     todo.Status = Status(status)
     todo.Priority = Priority(priority)
     todo.Topic = topic
 
-	// If status is Done and Completed not yet set, set it to now
-	if Status(status) == Done && todo.Completed == nil {
+    now := time.Now()
+    if todo.Status == Done && todo.Completed == nil {
         todo.Completed = &now
         todo.TimeWorked = time.Since(todo.Created)
     }
 
-	return nil
+    return nil
 }
 
 
 func (t *Todos) Load(filename string) error {
+
+
 	file, err := os.ReadFile(filename)
 	if err != nil {                            //to catch error but why tf is there no try catch block in go? or inbuilt ones?
 		if errors.Is(err, os.ErrNotExist) {
@@ -131,6 +137,7 @@ func (t *Todos) Load(filename string) error {
 }
 
 func (t *Todos) Store(filename string) error {
+
 		data, err := json.MarshalIndent(t, "", "  ")
 		if err != nil {
 			return err
